@@ -16,7 +16,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-6 py-16">
         <div className="text-center">
           <h1 className="text-6xl font-bold">
-            Sonic Signatures
+            Sonic Signatures -EE200 Final Project
           </h1>
 
           <p className="mt-4 text-zinc-400 text-lg">
