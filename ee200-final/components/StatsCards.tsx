@@ -72,7 +72,7 @@ export default function StatsCards({ result }: Props) {
           </div>
 
           <img
-            src={`http://localhost:8000${result.histogram}`}
+            src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${result.histogram}`}
             alt="Offset Histogram"
             className="
             w-full
@@ -83,12 +83,12 @@ export default function StatsCards({ result }: Props) {
           />
           <div>
     <h2>Spectrogram</h2>
-    <img src={result.spectrogram}/>
+    <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${result.spectrogram}`} alt="Spectrogram" />
   </div>
 
   <div>
     <h2>Constellation Map</h2>
-    <img src={result.constellation}/>
+    <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${result.constellation}`} alt="Constellation Map" />
   </div>
         </div>
         
