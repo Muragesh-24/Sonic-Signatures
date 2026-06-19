@@ -29,7 +29,7 @@ files.forEach((file) => {
   });
 
   const response = await axios.post(
-    "http://localhost:8000/batch-identify",
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/batch-identify`,
     formData,
     {
       headers: {

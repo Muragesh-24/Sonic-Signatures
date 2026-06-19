@@ -12,7 +12,7 @@ export default function CleanupPage(){
         try{
 
             const response = await axios.delete(
-                "http://localhost:8000/cleanup"
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/cleanup`
             );
 
             setMessage(

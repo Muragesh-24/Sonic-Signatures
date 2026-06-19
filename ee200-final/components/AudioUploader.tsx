@@ -66,7 +66,7 @@ export default function AudioUploader({
 
             const response = await axios.post(
 
-                "http://localhost:8000/identify",
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/identify`,
 
                 formData
 
