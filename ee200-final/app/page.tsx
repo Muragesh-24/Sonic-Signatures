@@ -10,37 +10,40 @@ export default function Home() {
   const [result, setResult] = useState<any>(null);
 
   return (
-    <main className="min-h-screen bg-black text-white">
-      <Navbar />
+ <main className="min-h-screen bg-black text-white overflow-x-hidden">
+  <Navbar />
 
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <div className="text-center">
-          <h1 className="text-6xl font-bold">
-            Sonic Signatures -EE200 Final Project
-          </h1>
+  <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+    <div className="text-center">
+      <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+        Sonic Signatures - EE200 Final Project
+      </h1>
 
-          <p className="mt-4 text-zinc-400 text-lg">
-            Shazam-Style Audio Fingerprinting
-          </p>
+      <p className="mt-4 text-zinc-400 text-base sm:text-lg">
+        Shazam-Style Audio Fingerprinting
+      </p>
+    </div>
+
+    <div className="mt-8 sm:mt-12">
+      <AudioUploader setResult={setResult} />
+    </div>
+
+    <div className="mt-8">
+      <BatchUploader />
+    </div>
+
+    {result && (
+      <>
+        <div className="mt-8 sm:mt-12">
+          <StatsCards result={result} />
         </div>
 
-        <div className="mt-12">
-          <AudioUploader setResult={setResult} />
+        <div className="mt-8">
+          <AnalysisSection result={result} />
         </div>
-        <div>
-          <BatchUploader  />
-        </div>
-
-        {result && (
-          <>
-            <div className="mt-12">
-              <StatsCards result={result} />
-            </div>
-
-            <AnalysisSection result={result} />
-          </>
-        )}
-      </section>
-    </main>
+      </>
+    )}
+  </section>
+</main>
   );
 }
