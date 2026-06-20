@@ -32,10 +32,10 @@ export default function Home() {
         <div className="mt-8 sm:mt-12">
           <StatsCards result={result} />
         </div>
-
+{/* 
         <div className="mt-8">
           <AnalysisSection result={result} />
-        </div>
+        </div> */}
       </>
     )}
     <div className="mt-8">
