@@ -27,12 +27,7 @@ export default function Home() {
     <div className="mt-8 sm:mt-12">
       <AudioUploader setResult={setResult} />
     </div>
-
-    <div className="mt-8">
-      <BatchUploader />
-    </div>
-
-    {result && (
+ {result && (
       <>
         <div className="mt-8 sm:mt-12">
           <StatsCards result={result} />
@@ -43,6 +38,11 @@ export default function Home() {
         </div>
       </>
     )}
+    <div className="mt-8">
+      <BatchUploader />
+    </div>
+
+   
   </section>
 </main>
   );

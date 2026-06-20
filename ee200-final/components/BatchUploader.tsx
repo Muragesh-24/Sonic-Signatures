@@ -1,18 +1,44 @@
 "use client";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import axios from "axios";
 import { Upload, Loader2, Download } from "lucide-react";
 
 export default function BatchUploader() {
 const [files, setFiles] = useState<File[]>([]);
 const [loading, setLoading] = useState(false);
+const [stepIndex, setStepIndex] = useState(0);
 
+const processingSteps = [
+"Uploading files...",
+"Generating spectrograms...",
+"Extracting audio fingerprints...",
+"Searching signature database...",
+"Comparing acoustic hashes...",
+"Computing confidence scores...",
+"Finding best matches...",
+"Almost there...",
+"preparing results.csv...",
+"please wait..."
+
+];
+useEffect(() => {
+  if (!loading) return;
+
+  const interval = setInterval(() => {
+    setStepIndex((prev) =>
+      prev < processingSteps.length - 1 ? prev + 1 : prev
+    );
+  }, 1800);
+
+  return () => clearInterval(interval);
+}, [loading]);
 async function processBatch() {
 if (files.length === 0) {
 alert("Please select audio files");
 return;
 }
+
 
 
 setLoading(true);
@@ -68,121 +94,176 @@ files.forEach((file) => {
 
 }
 
-return ( <div
-   className="
-   bg-zinc-900
-   border
-   border-zinc-800
-   rounded-xl
-   p-8
-   mt-8
- "
- > <h2
-     className="
-     text-2xl
-     font-bold
-     mb-4
-   "
-   >
-Batch Mode </h2>
-
-```
-  <p
-    className="
-    text-zinc-400
-    mb-6
-  "
-  >
-    Upload multiple audio clips and
-    download results.csv
-  </p>
-
+return ( 
   <div
-    className="
-    border-2
-    border-dashed
-    border-zinc-700
-    rounded-xl
-    p-8
-    text-center
+  className="
+  border-2
+  border-dashed
+  border-zinc-700
+  hover:border-green-500
+  transition
+  rounded-xl
+  p-6
+  sm:p-8
+  text-center
   "
-  >
+>
+  <label className="cursor-pointer block">
     <Upload
-      size={40}
-      className="mx-auto mb-4"
+      size={50}
+      className="mx-auto mb-4 text-green-500"
     />
+
+    <h3 className="text-xl font-semibold">
+      Upload Audio Dataset
+    </h3>
+
+    <p className="text-zinc-400 mt-2">
+      Select multiple audio clips for batch identification
+    </p>
+
+    <div className="mt-4">
+      <span
+        className="
+        inline-block
+        px-4
+        py-2
+        rounded-lg
+        bg-zinc-800
+        text-sm
+        "
+      >
+        Choose Files
+      </span>
+    </div>
 
     <input
       type="file"
       accept="audio/*"
       multiple
+      className="hidden"
       onChange={(e) =>
-        setFiles(
-          Array.from(
-            e.target.files || []
-          )
-        )
+        setFiles(Array.from(e.target.files || []))
       }
     />
+  </label>
 
-    {files.length > 0 && (
-      <div
-        className="
-        mt-4
-        text-left
-        max-h-40
-        overflow-auto
-      "
-      >
-        <p
-          className="
-          font-semibold
-          mb-2
-        "
-        >
-          Selected Files:
-        </p>
-
-        {files.map((file) => (
-          <p
-            key={file.name}
-            className="
-            text-sm
-            text-zinc-400
-          "
-          >
-            {file.name}
-          </p>
-        ))}
-      </div>
-    )}
-
-    <button
-      onClick={processBatch}
-      disabled={loading}
+  {files.length > 0 && (
+    <div
       className="
       mt-6
-      flex
-      items-center
-      gap-2
-      mx-auto
-      bg-green-600
-      hover:bg-green-700
-      px-6
-      py-3
+      bg-zinc-800
       rounded-lg
-    "
+      p-4
+      text-left
+      max-h-48
+      overflow-auto
+      "
     >
-      {loading ? (
-        <Loader2 className="animate-spin" />
-      ) : (
-        <>
-          <Download size={18} />
-          Generate results.csv
-        </>
-      )}
-    </button>
-  </div>
+      <p className="font-semibold mb-3 text-green-400">
+        {files.length} files selected
+      </p>
+
+      {files.map((file) => (
+        <div
+          key={file.name}
+          className="
+          text-sm
+          text-zinc-400
+          truncate
+          "
+        >
+          • {file.name}
+        </div>
+      ))}
+    </div>
+  )}
+
+  <button
+    onClick={processBatch}
+    disabled={loading || files.length === 0}
+    className="
+    mt-6
+    w-full
+    sm:w-auto
+    bg-green-600
+    hover:bg-green-700
+    disabled:bg-zinc-700
+    disabled:cursor-not-allowed
+    px-8
+    py-3
+    rounded-xl
+    font-medium
+    transition
+    "
+  >
+    {loading ? (
+      "Processing Dataset..."
+    ) : (
+      <>
+        <Download
+          size={18}
+          className="inline mr-2"
+        />
+        Generate results.csv
+      </>
+    )}
+  </button>
+
+  {loading && (
+    <div className="mt-8">
+      <Loader2
+        size={40}
+        className="
+        animate-spin
+        mx-auto
+        text-green-500
+        "
+      />
+
+      <h3 className="mt-4 text-lg font-semibold">
+        {processingSteps[stepIndex]}
+      </h3>
+
+      <p className="mt-2 text-zinc-500">
+        Processing {files.length} audio files
+      </p>
+
+      <div className="mt-6 max-w-md mx-auto text-left">
+        {processingSteps.map((step, idx) => (
+          <div
+            key={step}
+            className="flex items-center gap-3 py-1"
+          >
+            {idx < stepIndex ? (
+              <span className="text-green-500">
+                ✓
+              </span>
+            ) : idx === stepIndex ? (
+              <Loader2
+                size={14}
+                className="animate-spin text-green-500"
+              />
+            ) : (
+              <span className="text-zinc-600">
+                ○
+              </span>
+            )}
+
+            <span
+              className={
+                idx <= stepIndex
+                  ? "text-zinc-200"
+                  : "text-zinc-500"
+              }
+            >
+              {step}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
 </div>
 
 );
