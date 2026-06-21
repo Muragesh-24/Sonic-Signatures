@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Upload, Loader2 } from "lucide-react";
-
+import {saveSongHistory} from "@/utils/history";
 export default function AudioUploader({
   setResult,
 }: {
@@ -63,6 +63,9 @@ export default function AudioUploader({
         ...response.data,
         time: ((end - start) / 1000).toFixed(2),
       });
+      if(response.data.song) {
+    saveSongHistory(response.data.song);
+}
     } catch (error) {
       console.error(error);
       alert("Identification failed");

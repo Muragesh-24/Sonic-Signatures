@@ -13,6 +13,15 @@ export default function Navbar() {
           <button>Analysis</button>
           <button>Database</button>
           <button>About</button> */}
+          <a
+            href="/history"
+            className="
+            hover:text-zinc-200
+            transition
+            "
+          >
+            History
+          </a>
         </div>
       </div>
     </nav>
